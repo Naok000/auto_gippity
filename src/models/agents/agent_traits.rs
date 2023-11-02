@@ -21,7 +21,17 @@ pub struct ProjectScope {
 pub struct FactSheet {
     pub project_description: String,
     pub project_scope: Option<ProjectScope>,
-    pub external_urls: String,
-    pub backend_code: String,
-    pub api_endpoints_schema: String,
+    pub external_urls: Option<Vec<String>>,
+    pub backend_code: Option<String>,
+    pub api_endpoints_schema: Option<Vec<RouteObject>>,
+}
+
+#[async_trait]
+pub trait SpecialFunctions: Debug {
+
+    // Used to that manager can get attributes from Agents
+    fn get_attributes_from_agent(&self) -> &BasicAgent;
+
+    //  This function will allow agents to execute their logic
+    async fn execute(&mut self, factsheet: &mut FactSheet) -> Result<(), Box<dyn std::error::Error>>;
 }
