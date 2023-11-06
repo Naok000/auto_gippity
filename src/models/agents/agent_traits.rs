@@ -23,7 +23,7 @@ pub struct FactSheet {
     pub project_scope: Option<ProjectScope>,
     pub external_urls: Option<Vec<String>>,
     pub backend_code: Option<String>,
-    pub api_endpoints_schema: Option<Vec<RouteObject>>,
+    pub api_endpoint_schema: Option<Vec<RouteObject>>,
 }
 
 #[async_trait]
