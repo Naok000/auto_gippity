@@ -15,7 +15,7 @@ const API_SCHEMA_PATH: &str =
 
 // Extend ai function to encourage specific output
 pub fn extend_ai_function(ai_func: fn(&str) -> &'static str, func_input: &str) -> Message {
-    let ai_function_str = ai_func(func_input);
+    let ai_function_str: &str = ai_func(func_input);
 
     // Extend the string to encourage only printing the output
     let msg: String = format!(
@@ -55,7 +55,7 @@ pub async fn ai_task_request(
         Ok(llm_resp) => llm_resp,
         Err(_) => call_gpt(vec![extended_msg.clone()])
             .await
-            .expect("Faild twice to call OpenAI"),
+            .expect("Failed twice to call OpenAI"),
     }
 }
 
