@@ -8,7 +8,9 @@ use std::fs;
 const CODE_TEMPLATE_PATH: &str =
     "/Users/NAOKI/Documents/udemy/rust_autogpt/web_template/src/code_template.rs";
 
-const EXEC_MAIN_PATH: &str = "/Users/NAOKI/Documents/udemy/rust_autogpt/web_template/src/main.rs";
+    pub const WEB_SERVER_PROJECT_PATH: &str = "/Users/NAOKI/Documents/udemy/rust_autogpt/web_template/";
+
+pub const EXEC_MAIN_PATH: &str = "/Users/NAOKI/Documents/udemy/rust_autogpt/web_template/src/main.rs";
 
 const API_SCHEMA_PATH: &str =
     "/Users/NAOKI/Documents/udemy/rust_autogpt/auto_gippity/schemas/api_schema.json";
