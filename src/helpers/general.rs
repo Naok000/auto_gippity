@@ -6,9 +6,9 @@ use serde::de::DeserializeOwned;
 use std::fs;
 
 const CODE_TEMPLATE_PATH: &str =
-    "/Users/NAOKI/Documents/udemy/rust_autogpt/web_template/code_template.rs";
+    "/Users/NAOKI/Documents/udemy/rust_autogpt/web_template/src/code_template.rs";
 
-const EXEC_MAIN_PATH: &str = "/Users/NAOKI/Documents/udemy/rust_autogpt/web_template/main.rs";
+const EXEC_MAIN_PATH: &str = "/Users/NAOKI/Documents/udemy/rust_autogpt/web_template/src/main.rs";
 
 const API_SCHEMA_PATH: &str =
     "/Users/NAOKI/Documents/udemy/rust_autogpt/auto_gippity/schemas/api_schema.json";
@@ -85,6 +85,12 @@ pub async fn check_status_code(client: &Client, url: &str) -> Result<u16, reqwes
 // Get Code Template
 pub fn read_code_template_contents() -> String {
     let path: String = String::from(CODE_TEMPLATE_PATH);
+    fs::read_to_string(path).expect("Faild to read code template")
+}
+
+// Get Exec Main
+pub fn read_exec_main_contents() -> String {
+    let path: String = String::from(EXEC_MAIN_PATH);
     fs::read_to_string(path).expect("Faild to read code template")
 }
 

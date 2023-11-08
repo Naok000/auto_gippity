@@ -13,12 +13,10 @@ pub struct ManagingAgent {
     agents: Vec<Box<dyn SpecialFunctions>>,
 }
 
-
 impl ManagingAgent {
-    pub async fn new(usr_req: String) -> Result<Self, Box<dyn std::error::Error>> { 
-
+    pub async fn new(usr_req: String) -> Result<Self, Box<dyn std::error::Error>> {
         let position: String = "Project Manager".to_string();
-        
+
         let attributes: BasicAgent = BasicAgent {
             objective: "Manage agents who are building an excellent website for the user"
                 .to_string(),
@@ -26,7 +24,7 @@ impl ManagingAgent {
             state: AgentState::Discovery,
             memory: vec![],
         };
-        
+
         let project_description: String = ai_task_request(
             usr_req,
             &position,
@@ -34,21 +32,61 @@ impl ManagingAgent {
             convert_user_input_to_goal,
         )
         .await;
-        
+
         let agents: Vec<Box<dyn SpecialFunctions>> = vec![];
 
-        let factsheet: FactSheet = FactSheet { 
-            project_description, 
-            project_scope: None, 
-            external_urls: None, 
-            backend_code: None, 
-            api_endpoint_schema: None, 
+        let factsheet: FactSheet = FactSheet {
+            project_description,
+            project_scope: None,
+            external_urls: None,
+            backend_code: None,
+            api_endpoint_schema: None,
         };
 
         Ok(Self {
             attributes,
             factsheet,
-            agents
+            agents,
         })
+    }
+
+    fn add_agent(&mut self, agent: Box<dyn SpecialFunctions>) {
+        self.agents.push(agent);
+    }
+
+    fn create_agents(&mut self) {
+        self.add_agent(Box::new(AgentSolutionArchitect::new()));
+        // ! TODO ADD BACKEND AGENT
+        // able to add another agents. for example, frontend agent, security agent etc...
+    }
+
+    pub async fn execute_project(&mut self) {
+        self.create_agents();
+
+        for agent in &mut self.agents {
+            let agent_res: Result<(), Box<dyn std::error::Error>> =
+                agent.execute(&mut self.factsheet).await;
+
+            let agent_info: &BasicAgent = agent.get_attributes_from_agent();
+            dbg!(agent_info);
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn tests_managing_agent() {
+        let use_request: &str = "need a full stack app that fetches and tracks my fitness progress. Needs to include timezone info from the web.";
+
+        let mut managing_agent: ManagingAgent = ManagingAgent::new(use_request.to_string())
+            .await
+            .expect("Error creating Managing agent");
+
+        managing_agent.execute_project().await;
+
+        dbg!(managing_agent.factsheet);
     }
 }
