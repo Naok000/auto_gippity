@@ -14,10 +14,8 @@ use crate::models::agents::agent_traits::{FactSheet, RouteObject, SpecialFunctio
 
 use async_trait::async_trait;
 use reqwest::Client;
-use std::fs;
 use std::process::{Command, Stdio};
 use std::time::Duration;
-use tokio::io::DuplexStream;
 use tokio::time;
 
 #[derive(Debug)]
@@ -67,7 +65,7 @@ impl AgentBackendDeveloper {
     async fn call_improved_backend_code(&mut self, factsheet: &mut FactSheet) {
         let msg_context: String = format!(
             "CODE TEMPLATE: {:?} \n PROJECT_DESCRIPTION: {:?} \n",
-            factsheet.backend_code, factsheet,
+            factsheet.backend_code, factsheet
         );
 
         let ai_response: String = ai_task_request(
@@ -103,7 +101,7 @@ impl AgentBackendDeveloper {
 
     // Use of real files to reduce costs and speed up the testing process
     async fn call_extract_rest_api_endpoints(&self) -> String {
-        let backend_code: String = read_code_template_contents();
+        let backend_code: String = read_exec_main_contents();
 
         // Structure message context
         let msg_context: String = format!("CODE_INPUT: {}", backend_code);
@@ -177,7 +175,7 @@ impl SpecialFunctions for AgentBackendDeveloper {
                         .output()
                         .expect("Failed to build backend application");
 
-                    // Determin if build errors
+                    // Determine if build errors
                     if build_backend_server.status.success() {
                         self.bug_count = 0;
                         PrintCommand::UnitTest.print_agent_message(
@@ -347,6 +345,7 @@ mod tests {
         }"#;
         let mut factsheet: FactSheet = serde_json::from_str(factsheet_str).unwrap();
 
+        agent.attributes.state = AgentState::Discovery;
         agent
             .execute(&mut factsheet)
             .await
