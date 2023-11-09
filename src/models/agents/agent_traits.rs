@@ -6,8 +6,10 @@ use std::fmt::Debug;
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct RouteObject {
     pub is_route_dynamic: String,
-    pub is_user_login_and_logout: bool,
-    pub is_external_urls_required: bool,
+    pub method: String,
+    pub request_body: serde_json::Value,
+    pub response: serde_json::Value,
+    pub route: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq)]
